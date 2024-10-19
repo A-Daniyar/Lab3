@@ -17,14 +17,14 @@ public class DataChart extends JFrame {
 
     //Panels initialization
     StatsPanel statsPanel = new StatsPanel(dataList);
-    TablePanel tablePanel = new TablePanel(dataList); // error should be fixed later
+    TablePanel tablePanel = new TablePanel(dataList, this::showDetails);
     ChartPanel chartPanel = new ChartPanel(dataList);
     detailsPanel = new DetailsPanel();
 
     add(statsPanel, BorderLayout.NORTH);
     add(tablePanel, BorderLayout.CENTER);
-    add(chartPanel, BorderLayout.SOUTH);
-    add(detailsPanel, BorderLayout.EAST);
+    add(chartPanel, BorderLayout.EAST);
+    add(detailsPanel, BorderLayout.SOUTH);
 
     setSize(1000, 600);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -32,18 +32,19 @@ public class DataChart extends JFrame {
 
     }
 
+    //Loading data from excel file
     private void loadData() {
-        try (BufferedReader br = new BufferedReader(new FileReader("src/Read_GDP_per_capita.csv"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("src/Real_GDP_per_capita.csv"))) {
             String line = br.readLine(); //Skips the header
-            if (line != null && !line.startsWith("\ufEFF")) {
+            if (line != null && line.startsWith("\ufEFF")) {
                 line = line.substring(1); //adds BOM marker
             }
-            while (line != null) { // list of ignored symbols
+            while ((line = br.readLine()) != null) { // list of ignored symbols
                 String[] values = line.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
                 if (values.length < 4) continue;
 
                 String country = values[0].trim();
-                String gdpString = values[2].replaceAll("[&0-9.]", " ").trim();
+                String gdpString = values[2].replaceAll("[^0-9.]", "").trim();
                 if (gdpString.isEmpty()) continue;
 
                 double gdp = Double.parseDouble(gdpString);

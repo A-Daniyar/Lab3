@@ -22,6 +22,6 @@ public class DetailsPanel extends JPanel {
         yearLabel.setText("Year: " + data.getYear());
         gdpLabel.setText("GDP: " + data.getGdp());
         revalidate();
-        repaint(); // useful? or not?
+        repaint();
     }
 }
