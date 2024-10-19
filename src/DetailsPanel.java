@@ -18,6 +18,10 @@ public class DetailsPanel extends JPanel {
     }
 
     public void updateDetails(GDPData data){
-
+        countryLabel.setText("Country: " + data.getCountry());
+        yearLabel.setText("Year: " + data.getYear());
+        gdpLabel.setText("GDP: " + data.getGdp());
+        revalidate();
+        repaint(); // useful? or not?
     }
 }
