@@ -5,15 +5,16 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataChart extends JFrame {
+public class DataChart extends JFrame {     //Main class
     private List<GDPData> dataList = new ArrayList<>();
     private DetailsPanel detailsPanel;
 
-    public DataChart() {
-    setTitle("Real GDP per Capita Chart");
-    setLayout(new BorderLayout());
 
-    loadData();
+    public DataChart() {    //Constructor
+    setTitle("Real GDP per Capita Chart");
+    setLayout(new BorderLayout()); //arranges other components
+
+    loadData(); //initial loadData from class below
 
     //Panels initialization
     StatsPanel statsPanel = new StatsPanel(dataList);
@@ -21,14 +22,15 @@ public class DataChart extends JFrame {
     ChartPanel chartPanel = new ChartPanel(dataList);
     detailsPanel = new DetailsPanel();
 
+    //Adds panels to the frame
     add(statsPanel, BorderLayout.NORTH);
     add(tablePanel, BorderLayout.CENTER);
     add(chartPanel, BorderLayout.EAST);
     add(detailsPanel, BorderLayout.SOUTH);
 
-    setSize(1000, 600);
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    setVisible(true);
+    setSize(1000, 600); //window size adjuster
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //closes on exit
+    setVisible(true); //Makes the GUI visible
 
     }
 
@@ -41,11 +43,11 @@ public class DataChart extends JFrame {
             }
             while ((line = br.readLine()) != null) { // list of ignored symbols
                 String[] values = line.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
-                if (values.length < 4) continue;
+                if (values.length < 4) continue; //ensures it to all columns
 
                 String country = values[0].trim();
-                String gdpString = values[2].replaceAll("[^0-9.]", "").trim();
-                if (gdpString.isEmpty()) continue;
+                String gdpString = values[2].replaceAll("[^0-9.]", "").trim(); //leaves only GDP value
+                if (gdpString.isEmpty()) continue; //Skips empty gdps
 
                 double gdp = Double.parseDouble(gdpString);
                 int year = Integer.parseInt(values[3].trim());
@@ -54,7 +56,7 @@ public class DataChart extends JFrame {
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(); //Prints errors
         }
     }
 
@@ -63,7 +65,7 @@ public class DataChart extends JFrame {
     detailsPanel.updateDetails(data);
     }
 
-
+    //Launches this app
     public static void main(String[] args) {
         new DataChart();
     }

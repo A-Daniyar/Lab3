@@ -1,3 +1,4 @@
+//All GDP data representation
 public class GDPData {
     private String country;
     private int year;

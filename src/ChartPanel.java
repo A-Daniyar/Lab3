@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.util.List;
 import java.awt.*;
 
+//Draws a line chart
 public class ChartPanel extends JPanel {
     private List<GDPData> dataList;
 
@@ -20,17 +21,18 @@ public class ChartPanel extends JPanel {
         int height = getHeight() - margin * 2;
         double maxGdp = dataList.stream().mapToDouble(GDPData::getGdp).max().orElse(1);
 
+        //Axes
         g2.drawLine(margin, margin, margin, margin+height); //Y-axis
         g2.drawLine(margin, margin+height, margin+width, margin+height); //X-axis
-
         int xInterval = width / (dataList.size() - 1); //Distance between X-axis
         int prevX = margin;
         int prevY = height + margin - (int) ((dataList.get(0).getGdp() / maxGdp) * height);
 
+        //Structure of chart
         for (int i = 1; i < dataList.size(); i++) {
             int x = margin + i * xInterval;
             int y = height + margin - (int) ((dataList.get(i).getGdp() / maxGdp) * height);
-            g2.drawLine(prevX, prevY, x, y);
+            g2.drawLine(prevX, prevY, x, y); //Draw lines
             prevX = x;
             prevY = y;
         }

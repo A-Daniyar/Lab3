@@ -10,6 +10,11 @@ public class TablePanel extends JPanel {
     private DefaultTableModel tableModel;
     private List<GDPData> dataList; //data for sorting
 
+    //Flags for asdend and descend the data
+    private boolean isCountryAscending = true;
+    private boolean isYearAscending = true;
+    private boolean isGDPAscending = true;
+
     public TablePanel(List<GDPData> dataList, Consumer<GDPData> onRowSelected) {
         this.dataList = dataList;
 
@@ -37,9 +42,18 @@ public class TablePanel extends JPanel {
         populateTable(dataList);
 
         //Listeners of sorting buttons
-        sortCountry.addActionListener(e -> sortData(Comparator.comparing(GDPData::getCountry)));
-        sortYear.addActionListener(e -> sortData(Comparator.comparing(GDPData::getYear)));
-        sortGDP.addActionListener(e -> sortData(Comparator.comparing(GDPData::getGdp)));
+        sortCountry.addActionListener(e -> {
+            sortData(Comparator.comparing(GDPData::getCountry), isCountryAscending);
+            isCountryAscending = !isCountryAscending; //Toggles the flag
+        });
+        sortYear.addActionListener(e ->
+        {sortData(Comparator.comparing(GDPData::getYear), isYearAscending);
+        isYearAscending = !isYearAscending;
+        });
+        sortGDP.addActionListener(e -> {
+                sortData(Comparator.comparing(GDPData::getGdp), isGDPAscending);
+                isGDPAscending = !isGDPAscending;
+        });
 
 
         table.getSelectionModel().addListSelectionListener(e ->  {
@@ -60,7 +74,10 @@ public class TablePanel extends JPanel {
         }));
     }
 
-    private void sortData(Comparator<GDPData> comparator) {
+    private void sortData(Comparator<GDPData> comparator, boolean ascending) {
+        if(!ascending) {
+            comparator = comparator.reversed(); //reverses the comparator if descending
+        }
         dataList.sort(comparator); //Sorts the data
         populateTable(dataList); //Refreshes the data
     }
