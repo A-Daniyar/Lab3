@@ -3,7 +3,7 @@ import java.util.List;
 
 //Displays basic statistics about avg, max, min gdp
 public class StatsPanel extends JPanel {
-private JLabel statsLabel;
+    private JLabel statsLabel;
 
     //constructor to include data in app
     public StatsPanel(List<GDPData> dataList) {
@@ -12,7 +12,7 @@ private JLabel statsLabel;
         add(statsLabel);
     }
 
-    //basic part for let GUI working - updates the statistics based on provided information
+    //Streams - basic part for let GUI working - updates the statistics on-time
     public void updateStats(List<GDPData> dataList) {
         double sum = dataList.stream().mapToDouble(GDPData::getGdp).sum();
         double max = dataList.stream().mapToDouble(GDPData::getGdp).max().orElse(0);

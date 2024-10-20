@@ -11,8 +11,8 @@ public class DataChart extends JFrame {     //Main class
 
 
     public DataChart() {    //Constructor
-    setTitle("Real GDP per Capita Chart");
-    setLayout(new BorderLayout()); //arranges other components
+        setTitle("Real GDP per Capita Chart");
+        setLayout(new BorderLayout()); //arranges other components
 
     loadData(); //initial loadData from class below
 
@@ -22,7 +22,7 @@ public class DataChart extends JFrame {     //Main class
     ChartPanel chartPanel = new ChartPanel(dataList);
     detailsPanel = new DetailsPanel();
 
-    //Adds panels to the frame
+    //Adds panels to the frame, adjusts them
     add(statsPanel, BorderLayout.NORTH);
     add(tablePanel, BorderLayout.CENTER);
     add(chartPanel, BorderLayout.EAST);
