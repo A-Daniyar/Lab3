@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-public class ChartPanel extends JPanel {
+public class ChartPanel extends JPanel implements Observer {
     private List<GDPData> dataList;  // Holds the data for the chart
 
     public ChartPanel(List<GDPData> dataList) {
@@ -45,9 +45,15 @@ public class ChartPanel extends JPanel {
     }
 
     // Method to update the chart with new data
-    public void updateChart(List<GDPData> newDataList) {
-        this.dataList = newDataList;
-        revalidate();
+   // public void updateChart(List<GDPData> newDataList) {
+     //   this.dataList = newDataList;
+      //  revalidate();
+      //  repaint();
+   // }
+
+    @Override
+    public void update(List<GDPData> dataList) {
+        this.dataList = dataList;
         repaint();
     }
 }
