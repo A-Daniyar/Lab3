@@ -6,26 +6,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DataChart extends JFrame {     //Main class
-    private List<GDPData> dataList = new ArrayList<>();
+    private List<GDPData> dataList;
     private DetailsPanel detailsPanel;
 
     public DataChart() {    //Constructor
         setTitle("Real GDP per Capita Chart");
         setLayout(new BorderLayout()); //arranges other components
 
-    loadData(); //initial loadData from class below
+        dataList = new ArrayList<>();
+        loadData(); //initial loadData from class below
 
-    //Panels initialization
-    StatsPanel statsPanel = new StatsPanel(dataList);
-    ChartPanel chartPanel = new ChartPanel(dataList);
-    TablePanel tablePanel = new TablePanel(dataList, this::showDetails, chartPanel);
-    detailsPanel = new DetailsPanel();
+        //Panels initialization
+        StatsPanel statsPanel = new StatsPanel(dataList);
+        ChartPanel chartPanel = new ChartPanel(dataList);
+        TablePanel tablePanel = new TablePanel(dataList);
+        detailsPanel = new DetailsPanel();
 
-    //Adds panels to the frame, adjusts them
-    add(statsPanel, BorderLayout.NORTH);
-    add(tablePanel, BorderLayout.CENTER);
-    add(chartPanel, BorderLayout.EAST);
-    add(detailsPanel, BorderLayout.SOUTH);
+        //Linked observers
+        tablePanel.addObserver(statsPanel);
+        tablePanel.addObserver(chartPanel);
+
+        //Adds panels to the frame, adjusts them
+        add(statsPanel, BorderLayout.NORTH);
+        add(tablePanel, BorderLayout.CENTER);
+        add(chartPanel, BorderLayout.EAST);
+        add(detailsPanel, BorderLayout.SOUTH);
 
     setSize(1000, 600); //window size adjuster
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //closes on exit
