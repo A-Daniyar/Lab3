@@ -4,7 +4,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class TablePanel extends JPanel implements Subject{
     private JTable table;
@@ -27,6 +26,7 @@ public class TablePanel extends JPanel implements Subject{
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
 
+        //Creates and adjusts the label of buttons
         JPanel sortingPanel = new JPanel(new FlowLayout());
         JButton sortCountry = new JButton("Sort by Country");
         JButton sortYear = new JButton("Sort by Year");
@@ -39,6 +39,7 @@ public class TablePanel extends JPanel implements Subject{
 
         populateTable(dataList);
 
+        //Button actions for strategies
         sortCountry.addActionListener(e -> {
             sortByStrategy = new SortCountry();
             sortData();
@@ -48,7 +49,7 @@ public class TablePanel extends JPanel implements Subject{
             sortData();
         });
         sortGDP.addActionListener(e -> {
-            sortByStrategy = new SortYear();
+            sortByStrategy = new SortGDP();
             sortData();
         });
     }
@@ -63,9 +64,9 @@ public class TablePanel extends JPanel implements Subject{
     private void sortData() {
         if (sortByStrategy != null) {
             sortByStrategy.sort(dataList, isAscending);
-            isAscending = !isAscending;
-            populateTable(dataList);
-            notifyObservers();
+            isAscending = !isAscending; //Launches sort only after next click
+            populateTable(dataList); //Updates the table
+            notifyObservers(); //Notifies Observers
         }
     }
 

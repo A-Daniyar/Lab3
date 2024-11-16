@@ -44,13 +44,6 @@ public class ChartPanel extends JPanel implements Observer {
         }
     }
 
-    // Method to update the chart with new data
-   // public void updateChart(List<GDPData> newDataList) {
-     //   this.dataList = newDataList;
-      //  revalidate();
-      //  repaint();
-   // }
-
     @Override
     public void update(List<GDPData> dataList) {
         this.dataList = dataList;

@@ -1,5 +1,4 @@
 import javax.swing.*;
-//import java.awt.event.ActionListener;
 import java.util.List;
 
 //Displays basic statistics about avg, max, min gdp
