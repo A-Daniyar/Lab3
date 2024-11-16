@@ -1,23 +1,22 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class TablePanel extends JPanel {
+public class TablePanel extends JPanel implements Subject{
     private JTable table;
     private DefaultTableModel tableModel;
     private List<GDPData> dataList;
-    private ChartPanel chartPanel;  // Reference to ChartPanel
+    private List<Observer> observers = new ArrayList<>();
+    private SortByStrategy sortByStrategy;
 
-    private boolean isCountryAscending = true;
-    private boolean isYearAscending = true;
-    private boolean isGDPAscending = true;
+    private boolean isAscending = true;
 
-    public TablePanel(List<GDPData> dataList, Consumer<GDPData> onRowSelected, ChartPanel chartPanel) {
+    public TablePanel(List<GDPData> dataList) {
         this.dataList = dataList;
-        this.chartPanel = chartPanel;  // Store the ChartPanel reference
 
         setLayout(new BorderLayout());
 
@@ -41,26 +40,16 @@ public class TablePanel extends JPanel {
         populateTable(dataList);
 
         sortCountry.addActionListener(e -> {
-            sortData(Comparator.comparing(GDPData::getCountry), isCountryAscending);
-            isCountryAscending = !isCountryAscending;
+            sortByStrategy = new SortCountry();
+            sortData();
         });
         sortYear.addActionListener(e -> {
-            sortData(Comparator.comparing(GDPData::getYear), isYearAscending);
-            isYearAscending = !isYearAscending;
+            sortByStrategy = new SortYear();
+            sortData();
         });
         sortGDP.addActionListener(e -> {
-            sortData(Comparator.comparing(GDPData::getGdp), isGDPAscending);
-            isGDPAscending = !isGDPAscending;
-        });
-
-        table.getSelectionModel().addListSelectionListener(e -> {
-            int selectedRow = table.getSelectedRow();
-            if (selectedRow >= 0) {
-                String country = (String) table.getValueAt(selectedRow, 0);
-                int year = (Integer) table.getValueAt(selectedRow, 1);
-                double gdp = (Double) table.getValueAt(selectedRow, 2);
-                onRowSelected.accept(new GDPData(country, year, gdp));
-            }
+            sortByStrategy = new SortYear();
+            sortData();
         });
     }
 
@@ -71,12 +60,28 @@ public class TablePanel extends JPanel {
         }));
     }
 
-    private void sortData(Comparator<GDPData> comparator, boolean ascending) {
-        if (!ascending) {
-            comparator = comparator.reversed();
+    private void sortData() {
+        if (sortByStrategy != null) {
+            sortByStrategy.sort(dataList, isAscending);
+            isAscending = !isAscending;
+            populateTable(dataList);
+            notifyObservers();
         }
-        dataList.sort(comparator);
-        populateTable(dataList);
-        chartPanel.updateChart(dataList);  // Update the chart with new sorted data
+    }
+
+    @Override
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    public void notifyObservers() {
+        for (Observer observer : observers) {
+            observer.update(dataList);
+        }
     }
 }
