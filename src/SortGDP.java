@@ -1,6 +1,7 @@
 import java.util.Comparator;
 import java.util.List;
 
+//Sorts GDPperCapita GDPData by using strategy pattern
 public class SortGDP implements SortByStrategy{
     @Override
     public void sort(List<GDPData> dataList, boolean ascending){

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+//Displays and sort GDP data in a JTable
 public class TablePanel extends JPanel implements Subject{
     private JTable table;
     private DefaultTableModel tableModel;
@@ -14,6 +15,7 @@ public class TablePanel extends JPanel implements Subject{
 
     private boolean isAscending = true;
 
+    //Constructor for GDPData initialization
     public TablePanel(List<GDPData> dataList) {
         this.dataList = dataList;
 
@@ -32,6 +34,7 @@ public class TablePanel extends JPanel implements Subject{
         JButton sortYear = new JButton("Sort by Year");
         JButton sortGDP = new JButton("Sort by GDP");
 
+        //Adds buttons for sorting panel
         sortingPanel.add(sortCountry);
         sortingPanel.add(sortYear);
         sortingPanel.add(sortGDP);
@@ -54,6 +57,7 @@ public class TablePanel extends JPanel implements Subject{
         });
     }
 
+    //Adds each GDP object as a new row in the table
     private void populateTable(List<GDPData> dataList) {
         tableModel.setRowCount(0);
         dataList.forEach(data -> tableModel.addRow(new Object[]{
@@ -70,6 +74,7 @@ public class TablePanel extends JPanel implements Subject{
         }
     }
 
+    //Observers
     @Override
     public void addObserver(Observer observer) {
         observers.add(observer);
